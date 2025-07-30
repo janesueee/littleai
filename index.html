@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI对话网页 - Mini Tavern</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@333&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <nav class="top-nav">
+      <button id="open-api-settings-btn" class="nav-button">⚙️ API 设置</button>
+      <button id="open-char-manager-btn" class="nav-button">🎭 角色管理</button>
+      <button id="open-user-settings-btn" class="nav-button">👤 用户设置</button>
+    </nav>
+
+    <div class="status-section">
+      <p>状态：<span id="status-msg" class="status-message">等待输入...</span></p>
+    </div>
+
+    <main class="chat-main-section">
+      <div class="chatbox" id="chatbox"></div>
+      <div class="input-area">
+        <textarea id="user-input" placeholder="说点什么吧..." rows="3"></textarea>
+        <button onclick="sendMessage()" class="btn btn-send">发送</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="api-settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚙️ API & 模型设置</h2>
+        <button class="close-modal-btn" data-modal="api-settings-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+            <label for="api-url">API 地址（反代）:</label>
+            <input type="text" id="api-url" placeholder="例如 https://api.yourproxy.com/v1">
+        </div>
+
+        <div class="setting-item">
+            <label for="api-key">API 密钥:</label>
+            <input type="password" id="api-key" placeholder="例如 sk-xxxx">
+        </div>
+        <button onclick="testApi()" class="btn btn-primary api-test-btn">✅ 测试API连接</button>
+
+        <div class="setting-item mt-15">
+            <label for="model-select">可用模型：</label>
+            <select id="model-select">
+                <option value="">（点击测试API后加载）</option>
+            </select>
+        </div>
+
+        <div class="setting-item remember-me-option">
+            <input type="checkbox" id="remember-api">
+            <label for="remember-api">记住 API 地址和密钥</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="char-manager-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🎭 角色管理</h2>
+        <button class="close-modal-btn" data-modal="char-manager-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+          <label for="charcard-input">导入角色卡 (JSON):</label>
+          <input type="file" id="charcard-input" accept=".json" class="file-input">
+        </div>
+        <hr class="separator">
+        <h3>已导入角色</h3>
+        <div id="character-list" class="character-list">
+          <p class="no-chars-msg">暂无角色导入。</p>
+        </div>
+        <div class="current-char-display-area mt-15">
+          <p>当前选择角色：<span id="display-char-name" class="info-highlight">未选择</span></p>
+          <div class="info-scrollable">
+            <p><span id="display-char-desc" class="info-text">描述: （未选择）</span></p>
+          </div>
+        </div>
+        <button id="clear-all-chars-btn" class="btn btn-danger mt-15">清空所有角色</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="user-settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>👤 用户设置</h2>
+        <button class="close-modal-btn" data-modal="user-settings-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+            <label for="user-name-input">你的名字 ({{user}} 替换):</label>
+            <input type="text" id="user-name-input" placeholder="例如 玩家 / {{(user)}}">
+        </div>
+        <div class="setting-item">
+            <label for="user-persona-input">你的角色人设 ({{user_persona}} 替换):</label>
+            <textarea id="user-persona-input" rows="6" placeholder="例如：你是一个善良、勇敢的冒险家，来自遥远的王国..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
